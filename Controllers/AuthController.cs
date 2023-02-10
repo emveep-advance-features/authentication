@@ -29,24 +29,8 @@ namespace authentication.Controllers
             {
                 return BadRequest(new { message = "Username or password is incorrect" });
             }
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("Dd03Majde883bqANauoa983qFNkadaldisahakaFNa983qlsvlaahqlAjskxxianakah");
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, user.id.ToString())
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials
-                (
-                    new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha256Signature
-                )
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenItem = tokenHandler.WriteToken(token);
-            // var tokenItem = repository.generateToken(model.id);
+            
+            var tokenItem = repository.generateToken(user.id);
             return Ok(new {
                 username = user.username,
                 token = tokenItem
